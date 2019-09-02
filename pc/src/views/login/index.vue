@@ -16,7 +16,7 @@
                 <el-input v-model="ruleForm.code" placeholder="请输入验证码"></el-input>
               </el-col>
               <el-col :span="6" :offset="5">
-                <el-button
+                <el-button class="send-btn"
                   type="primary"
                   @click="sendReq"
                   :disabled="sec!=60"
@@ -145,6 +145,7 @@ export default {
           return false;
         }
       });
+      
     }
   }
 };
@@ -168,6 +169,9 @@ export default {
       img {
         width: 150px;
       }
+    }
+    .send-btn{
+      width: 101px;
     }
     .form-btn {
       width: 100%;

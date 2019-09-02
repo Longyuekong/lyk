@@ -17,4 +17,21 @@ const routes = [{
 const router = new VueRouter({
     routes
 })
+router.beforeEach((to, from, next) => {
+    // to and from are both route objects. must call `next`.
+    //只要你去的不是登录页
+    if(to.path!='/login'){
+        let res = window.sessionStorage.getItem('userInfo')
+        if (res) {
+            //成功以后执行的回调函数
+            next()
+        }else{
+            Vue.prototype.$message.error('登录失败,请重新登录');
+            next('/login') //放行到login页面
+            return;
+        }
+        }else{
+            next()
+        }
+})
 export default router
