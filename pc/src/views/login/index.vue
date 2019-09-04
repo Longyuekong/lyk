@@ -48,7 +48,7 @@
 <script>
 import { setInterval, clearInterval } from "timers";
 import { log } from "util";
-import axios from "axios";
+
 export default {
   data() {
     return {
@@ -107,8 +107,8 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           //1.如果登录成功就发送请求,获取数据,并且跳转
-          axios
-            .post(`http://ttapi.research.itcast.cn/mp/v1_0/authorizations`, {
+          this.$axios
+            .post(`authorizations`, {
               mobile: this.ruleForm.phone,
               code: this.ruleForm.code
             })

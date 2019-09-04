@@ -14,6 +14,7 @@
         </el-header>
         <el-main class="my-aside-main">
           <el-menu
+            :router="true"
             default-active="2"
             class="el-menu-vertical-demo"
             background-color="#323745"
@@ -29,23 +30,19 @@
               <template slot="title">
                 <span>内容管理</span>
               </template>
-              <el-menu-item-group>
-                <el-menu-item index="1-1">发布文章</el-menu-item>
-                <el-menu-item index="1-2">内容列表</el-menu-item>
-                <el-menu-item index="1-3">评论列表</el-menu-item>
-                <el-menu-item index="1-4">素材管理</el-menu-item>
-              </el-menu-item-group>
+              <el-menu-item index="1-1">发布文章</el-menu-item>
+              <el-menu-item index="/article">内容列表</el-menu-item>
+              <el-menu-item index="1-3">评论列表</el-menu-item>
+              <el-menu-item index="1-4">素材管理</el-menu-item>
             </el-submenu>
             <el-submenu index="3">
               <template slot="title">
                 <span>粉丝管理</span>
               </template>
-              <el-menu-item-group>
-                <el-menu-item index="2-1">图文数据</el-menu-item>
-                <el-menu-item index="2-2">粉丝概况</el-menu-item>
-                <el-menu-item index="2-3">粉丝画像</el-menu-item>
-                <el-menu-item index="2-4">粉丝列表</el-menu-item>
-              </el-menu-item-group>
+              <el-menu-item index="2-1">图文数据</el-menu-item>
+              <el-menu-item index="2-2">粉丝概况</el-menu-item>
+              <el-menu-item index="2-3">粉丝画像</el-menu-item>
+              <el-menu-item index="2-4">粉丝列表</el-menu-item>
             </el-submenu>
             <el-menu-item index="4">
               <span slot="title">账号信息</span>
@@ -54,33 +51,40 @@
         </el-main>
       </el-container>
     </el-aside>
-    <!-- 朱栏 -->
+
+    <!-- 主栏 -->
     <el-main class="my-main">
       <!-- 主栏里面包含header和小main -->
-      <el-header class="topBar">
-        <el-row class="my-company">
-          <!-- 左 -->
-          <el-col :span="16">
-            <i class="el-icon-s-operation"></i>
-            <span>江苏传智播客教育科技股份有限公司</span>
-          </el-col>
-          <!-- 右 -->
-          <el-col :span="3" :offset="5">
-            <el-dropdown trigger="click" class="my-dropdown" @command="quits">
-              <span class="el-dropdown-link">
-                <img :src="userMsg.photo" alt />
-                <span>{{userMsg.name}}</span>
-                <i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item icon="el-icon-user" command="user">个人信息</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-s-home" command="home">git地址</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-switch-button" command="btn">退出</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </el-col>
-        </el-row>
-      </el-header>
+      <el-container>
+        <el-header class="topBar">
+          <el-row class="my-company">
+            <!-- 左 -->
+            <el-col :span="16">
+              <i class="el-icon-s-operation"></i>
+              <span>江苏传智播客教育科技股份有限公司</span>
+            </el-col>
+            <!-- 右 -->
+            <el-col :span="3" :offset="5">
+              <el-dropdown trigger="click" class="my-dropdown" @command="quits">
+                <span class="el-dropdown-link">
+                  <img :src="userMsg.photo" alt />
+                  <span>{{userMsg.name}}</span>
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item icon="el-icon-user" command="user">个人信息</el-dropdown-item>
+                  <el-dropdown-item icon="el-icon-s-home" command="home">git地址</el-dropdown-item>
+                  <el-dropdown-item icon="el-icon-switch-button" command="btn">退出</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-col>
+          </el-row>
+        </el-header>
+        <!-- main区域,因为这里是公共的,统一用view视图 -->
+        <el-main>
+          <router-view></router-view>
+        </el-main>
+      </el-container>
     </el-main>
   </el-container>
 </template>
@@ -107,7 +111,7 @@ export default {
       } else if (cmd === "home") {
         window.open("https://github.com/ToddLoveDiane/myVueProject");
       } else {
-        console.log("myself");
+        window.console.log("111");
       }
     }
   },
@@ -143,6 +147,7 @@ export default {
   }
   .my-main {
     padding: 0;
+    background: rgba(242, 242, 242, 0.7);
     .topBar {
       background-color: #fff;
       padding: 0;
@@ -150,6 +155,9 @@ export default {
         display: flex;
         align-items: center;
         height: 100%;
+        .el-icon-s-operation {
+          padding: 0 5px;
+        }
         .my-dropdown {
           .el-dropdown-link {
             display: flex;
