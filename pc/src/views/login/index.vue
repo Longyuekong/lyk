@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       ruleForm: {
-        phone: "18801185981",
+        phone: "18801185985",
         code: "",
         agree: false
       },
@@ -92,7 +92,7 @@ export default {
       let timeID = setInterval(() => {
         this.sec--;
         //1.因为没有发送请求,所以我们延迟3秒出效果,模拟发送短信成功
-        if (this.sec === 56) {
+        if (this.sec === 58) {
           this.ruleForm.code = "246810";
         }
         //2.判断按钮,如果已经到了0,重新归位
@@ -108,7 +108,7 @@ export default {
         if (valid) {
           //1.如果登录成功就发送请求,获取数据,并且跳转
           this.$axios
-            .post(`authorizations`, {
+            .post(`/mp/v1_0/authorizations`, {
               mobile: this.ruleForm.phone,
               code: this.ruleForm.code
             })

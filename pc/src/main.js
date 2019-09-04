@@ -18,12 +18,12 @@ Vue.use(ElementUI)
 
 
 import axios from "axios";
-axios.defaults.baseURL = 'http://ttapi.research.itcast.cn';
+axios.defaults.baseURL = `http://ttapi.research.itcast.cn`;
 Vue.prototype.$axios = axios;
 //axios赋给原型
 // 添加请求拦截器
 axios.interceptors.request.use(function (config) {
-  const user = JSON.parse(window.sessionStorage.getItem('user_info'))
+  const user = JSON.parse(window.sessionStorage.getItem('userInfo'))
 
   // 有值才添加token
   if (user)

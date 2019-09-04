@@ -28,6 +28,7 @@
             end-placeholder="结束日期"
           ></el-date-picker>
         </el-form-item>
+          <el-button type="primary" size="small">筛选</el-button>        
       </el-form>
     </div>
 
@@ -56,6 +57,7 @@
           <el-button type="danger" size="small">删除</el-button>
         </template>
       </el-table-column>
+
     </el-table>
 
     <el-pagination
@@ -72,6 +74,7 @@
 
 <script>
 export default {
+  name:'myariticle',
   data() {
     return {
       //是否显示加载动画，默认为false
@@ -82,49 +85,22 @@ export default {
         channel_id: "",
         date: ""
       },
-
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ]
+      //如果不是空数组,进来页面是没有Image这个属性的,所以会报错Image  undefined
+      tableData: []
     };
   },
 
   methods: {
     // 封装的获取表格数据的方法
     loadTableData(page) {
-      // // 获取到登录后的token
-      // let obj = JSON.parse(window.sessionStorage.getItem("user_info"));
-
       // 发请求之前让转圈圈
       this.loading = true;
 
       this.$axios
         .get("/mp/v1_0/articles", {
           params: {
-            page: page
+            page
           }
-          // headers: {
-          //   Authorization: `Bearer ${obj.token}`
-          // }
         })
         .then(res => {
           console.log(res);

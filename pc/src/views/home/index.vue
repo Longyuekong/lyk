@@ -120,7 +120,7 @@ export default {
     let res = window.sessionStorage.getItem("userInfo");
     //2.JSON格式转字符串
     let obj = JSON.parse(res);
-    console.log(obj);
+    // console.log(obj);
     this.userMsg.name = obj.name;
     this.userMsg.photo = obj.photo;
   }
