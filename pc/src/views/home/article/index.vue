@@ -163,10 +163,10 @@ export default {
     },
     editData(row){
       //点击这个按钮要做的事情:1.跳转到发布文章页面,同时将数据传过去
-      if (this.$router.name==='publish-edit') {
+      // if (this.$router.name==='publish-edit') {
         
         this.$router.push('/publish/' + row.id)
-      }
+      // }
       //2.跟发布文章区分开来,给它命名
     },
     handleCurrentChange(page) {

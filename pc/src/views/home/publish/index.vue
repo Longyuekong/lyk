@@ -1,5 +1,5 @@
 <template>
-  <el-form  ref="form" :model="form" :rules="rules" label-width="60px">
+  <el-form ref="form" :model="form" :rules="rules" label-width="60px">
     <!-- 标题 -->
     <el-form-item label="标题" prop="title">
       <el-input v-model="form.title" placeholder="请添加标题" size="large"></el-input>
@@ -144,16 +144,17 @@ export default {
   },
   created() {
     //一进来就发送请求,如果是新增页就不需要发请求,因为不需要数据
-    if (this.$router.name === "publish.edit") {
+    // 新增不需要发请求
+    if (this.$route.name === "publish-edit") {
       this.$axios
         .get(`/mp/v1_0/articles/${this.$route.params.id}`)
         .then(res => {
-          // console.log(res);
-          // this.form = res.data.data;
           this.form = res.data.data;
         });
-    }else{
-
+    } else {
+      //新增就不需要加载中，直接就停掉
+      console.log(11111);
+      
     }
   }
 };
