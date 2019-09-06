@@ -16,24 +16,39 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI)
 //因为访问的都是同一个服务器,所以我们可以设置基地址,简化代码
 
-
+// 导入JSONbiG
+import JSONbig from 'json-bigint';
 import axios from "axios";
-axios.defaults.baseURL = `http://ttapi.research.itcast.cn`;
 Vue.prototype.$axios = axios;
+axios.defaults.baseURL = `http://ttapi.research.itcast.cn`;
 //axios赋给原型
-// 添加请求拦截器
-axios.interceptors.request.use(function (config) {
-  const user = JSON.parse(window.sessionStorage.getItem('userInfo'))
+//在传递给 then/catch 前，允许修改响应数据
+axios.defaults.transformResponse = [function (data) {
+    // 对 data 进行任意转换处理
+    //使用try,catch语法
+    try {
+      //如果可以转换成功,那么我们就使用成功的数据
+      //使用try catch代码报错不会影响后面
+      let obj = JSONbig.parse(data);
+      window.console.log(obj);
+      return obj;
+    } catch (error) {
+      return data;
+    }
+  }],
+  // 添加请求拦截器
+  axios.interceptors.request.use(function (config) {
+    const user = JSON.parse(window.sessionStorage.getItem('userInfo'))
 
-  // 有值才添加token
-  if (user)
-    config.headers.Authorization = `Bearer ${user.token}`
-  // 在发送请求之前做些什么
-  return config;
-}, function (error) {
-  // 对请求错误做些什么
-  return Promise.reject(error);
-});
+    // 有值才添加token
+    if (user)
+      config.headers.Authorization = `Bearer ${user.token}`
+    // 在发送请求之前做些什么
+    return config;
+  }, function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+  });
 
 
 // 添加响应拦截器

@@ -1,11 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
+
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err)
+}
 //导入组件
 //组件是view里的两个页面.写index的原因是:它会默认寻找Index
 import login from '../views/login'
 import home from '../views/home'
 import article from '../views/home/article'
+import publish from '../views/home/publish'
 //因为beforeEach也是在router当中
 //
 import NProgress from 'nprogress'
@@ -22,6 +28,9 @@ const routes = [{
     children: [{
         path: '/article',
         component: article
+    }, {
+        path: '/publish',
+        component: publish
     }]
 }]
 //创建路由对象 
