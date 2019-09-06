@@ -1,8 +1,8 @@
 <template>
-  <el-form ref="form" :model="form" :rules="rules" label-width="60px">
+  <el-form  ref="form" :model="form" :rules="rules" label-width="60px">
     <!-- 标题 -->
-    <el-form-item label="标题" prop="name">
-      <el-input v-model="form.name" placeholder="请添加标题" size="large"></el-input>
+    <el-form-item label="标题" prop="title">
+      <el-input v-model="form.title" placeholder="请添加标题" size="large"></el-input>
     </el-form-item>
     <!-- 富文本编译器 -->
     <!-- el-form-item为一行 -->
@@ -20,12 +20,12 @@
     </el-form-item>
     <!-- 频道 -->
     <el-form-item label="频道">
-      <mychannel></mychannel>
+      <mychannel v-model="form.channel_id"></mychannel>
     </el-form-item>
     <!-- 发表文章按钮 -->
     <br />
     <el-form-item>
-      <el-button  plain >存为草稿</el-button>
+      <el-button plain>存为草稿</el-button>
       <el-button type="primary" plain @click="pubArticle('form')">发表文章</el-button>
     </el-form-item>
   </el-form>
@@ -41,6 +41,7 @@ import "quill/dist/quill.bubble.css";
 import { quillEditor } from "vue-quill-editor";
 import mychannel from "../../../components/mychannel";
 export default {
+  name: "publish",
   components: {
     quillEditor,
     mychannel
@@ -48,9 +49,10 @@ export default {
   data() {
     return {
       form: {
-        name: "",
+        title: "",
         content: "",
-        status: ""
+        status: "",
+        channel_id: ""
       },
       rules: {
         name: [
@@ -74,18 +76,12 @@ export default {
           toolbar: [
             ["bold", "italic", "underline", "strike"], // toggled buttons
             ["blockquote", "code-block"],
-
             [{ header: 1 }, { header: 2 }], // custom button values
             [{ list: "ordered" }, { list: "bullet" }],
             [{ script: "sub" }, { script: "super" }], // superscript/subscript
             [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
             [{ direction: "rtl" }], // text direction
-
-            [{ size: ["small", false, "large", "huge"] }], // custom dropdown
-            [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
             [{ color: [] }, { background: [] }], // dropdown with defaults from theme
-            [{ font: [] }],
             [{ align: [] }],
             ["image"],
             ["clean"] // remove formatting button
@@ -98,30 +94,66 @@ export default {
     pubArticle(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          // 如果验证通过就发这个
-          this.$axios.post("/mp/v1_0/articles", {
-            title: this.form.name,
-            content: this.form.content,
-            cover: {
-              type: 1,
-              images: [
-                "http://toutiao.meiduo.site/Fjl26KTE9-NFfkRzIZOner4yeqGl"
-              ]
-            },
-            channel_id: 2
+          if (this.$route.name === "publish-edit") {
+            //做修改
+            this.$axios
+              .put(`/mp/v1_0/articles/${this.$route.params.id}`, {
+                title: this.form.title,
+                content: this.form.content,
+                cover: {
+                  type: 1,
+                  images: [
+                    "http://toutiao.meiduo.site/Fjl26KTE9-NFfkRzIZOner4yeqGl"
+                  ]
+                },
+                channel_id: this.form.channel_id
+              })
+              .then(res => {
+                if (res.data.message.toLowerCase() == "ok") {
+                  this.$message.success("修改成功");
+                  this.$router.push("/article");
+                }
+              });
+          } else {
+            // 发请求去做新增
+            this.$axios
+              .post("/mp/v1_0/articles", {
+                title: this.form.title,
+                content: this.form.content,
+                cover: {
+                  type: 1,
+                  images: [
+                    "http://toutiao.meiduo.site/Fjl26KTE9-NFfkRzIZOner4yeqGl"
+                  ]
+                },
+                channel_id: this.form.channel_id
+              })
+              .then(res => {
+                if (res.data.message.toLowerCase() == "ok") {
+                  this.$message.success("发布成功！");
+                  this.$router.push("/article");
+                }
+              });
           }
-          .then(res=>{
-              if (res.data.message.toLowerCase() ==='ok') {
-                  this.$message.success('发表成功！');
-                  this.$router.push('/article')
-              }
-          })
-          );
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+    }
+  },
+  created() {
+    //一进来就发送请求,如果是新增页就不需要发请求,因为不需要数据
+    if (this.$router.name === "publish.edit") {
+      this.$axios
+        .get(`/mp/v1_0/articles/${this.$route.params.id}`)
+        .then(res => {
+          // console.log(res);
+          // this.form = res.data.data;
+          this.form = res.data.data;
+        });
+    }else{
+
     }
   }
 };

@@ -31,6 +31,10 @@ const routes = [{
     }, {
         path: '/publish',
         component: publish
+    }, {
+        path: '/publish/:id',
+        component:publish,
+        name:'publish-edit'
     }]
 }]
 //创建路由对象 

@@ -55,7 +55,7 @@
       <!-- 按钮 -->
       <el-table-column label="操作" width="150">
         <template slot-scope="scope">
-          <el-button type="primary" size="small">修改</el-button>
+          <el-button type="primary" size="small" @click='editData(scope.row)'>修改</el-button>
           <el-button type="danger" size="small" @click="delData(scope.row)">删除</el-button>
           <!-- scope.row是每一行的总数据,所以点击可以全删 -->
         </template>
@@ -136,8 +136,8 @@ export default {
     delData(row) {
       // 只要经过JSON-bigint转换后的id
       // 直接toString,就能到它真实的完整的id
-      console.log(row.id);
-      console.log(row.id.toString());
+      // console.log(row.id);
+      // console.log(row.id.toString());
       this.$confirm("您确认删除吗", "提示", {
         confirmButtonText: "确认",
         cancelButtonText: "取消",
@@ -154,14 +154,21 @@ export default {
           });
         })
         .catch(() => {
-          console.log(row.id);
+          // console.log(row.id);
           this.$message({
             type: "info",
             message: "已取消删除"
           });
         });
     },
-
+    editData(row){
+      //点击这个按钮要做的事情:1.跳转到发布文章页面,同时将数据传过去
+      if (this.$router.name==='publish-edit') {
+        
+        this.$router.push('/publish/' + row.id)
+      }
+      //2.跟发布文章区分开来,给它命名
+    },
     handleCurrentChange(page) {
       this.loadTableData(page);
     }
