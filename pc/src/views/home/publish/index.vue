@@ -40,6 +40,7 @@ import "quill/dist/quill.bubble.css";
 
 import { quillEditor } from "vue-quill-editor";
 import mychannel from "../../../components/mychannel";
+import { watch } from "fs";
 export default {
   name: "publish",
   components: {
@@ -52,8 +53,11 @@ export default {
         title: "",
         content: "",
         status: "",
-        channel_id: ""
+        channel_id: "",
+        isSend:false
       },
+      newForm: {},
+      // 用来接受传过来的数据
       rules: {
         name: [
           {
@@ -111,6 +115,7 @@ export default {
               .then(res => {
                 if (res.data.message.toLowerCase() == "ok") {
                   this.$message.success("修改成功");
+                  this.newForm = this.form;
                   this.$router.push("/article");
                 }
               });
@@ -131,7 +136,10 @@ export default {
               .then(res => {
                 if (res.data.message.toLowerCase() == "ok") {
                   this.$message.success("发布成功！");
+                  this.newForm = this.form;
+                  this.isSend=true;
                   this.$router.push("/article");
+                  
                 }
               });
           }
@@ -140,21 +148,77 @@ export default {
           return false;
         }
       });
-    }
-  },
-  created() {
-    //一进来就发送请求,如果是新增页就不需要发请求,因为不需要数据
-    // 新增不需要发请求
-    if (this.$route.name === "publish-edit") {
+    },
+    sendData() {
+      //1.发送请求很频繁,所以封装
       this.$axios
         .get(`/mp/v1_0/articles/${this.$route.params.id}`)
         .then(res => {
           this.form = res.data.data;
+          //对象的解构语法
+          this.newForm = { ...this.form };
         });
+    }
+  },
+
+  created() {
+    //一进来就发送请求,如果是新增页就不需要发请求,因为不需要数据
+    // 新增不需要发请求
+    if (this.$route.name === "publish-edit") {
+      this.sendData();
     } else {
       //新增就不需要加载中，直接就停掉
       console.log(11111);
-      
+
+    }
+  },
+  //to：到哪去
+  //from：从哪来
+  //next：放行，是否继续跳转，调用就代表继续跳转，不调用就代表不跳转
+  beforeRouteLeave(to, from, next) {
+    if (this.$route.name === "publish-edit") {
+      if (
+        this.form.title == this.newForm.title &&
+        this.form.content == this.newForm.content
+      ) {
+        return next();
+      }
+    } else {
+      // 新增判断是否为空
+      if (this.form.title == "" && this.form.content ==''|| this.isSend) {
+        this.isSend=false;
+        //设置开关思想,当我们点击
+        return next();
+      }
+    }
+
+    //要问一下用户是否要离开
+    this.$confirm("您当前页面有未保存的内容，是否继续离开？", "提示", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning"
+    })
+      .then(() => {
+        //点击确定了
+        next();
+      })
+      .catch(() => {
+        //点击取消了
+      });
+  },
+
+  watch: {
+    // 参数是变化后的值
+    "$route.params.id"(value) {
+      console.log('变化了：' + value)
+      if (value) {
+        //有值，代表这是修改，只是把id变了，根据新的id去发请求获取数据渲染界面
+        this.sendData();
+      } else {
+        //如果value没值，代表是新增，新增就要把界面清空
+        this.form.title = "";
+        this.form.content = "";
+      }
     }
   }
 };

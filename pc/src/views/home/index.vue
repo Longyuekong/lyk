@@ -111,7 +111,7 @@ export default {
       } else if (cmd === "home") {
         window.open("https://github.com/ToddLoveDiane/myVueProject");
       } else {
-        window.console.log("111");
+        // window.console.log("111");
       }
     }
   },

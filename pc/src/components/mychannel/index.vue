@@ -25,14 +25,14 @@ export default {
   },
   methods: {
     getData(e) {
-      console.log(e);
+      // console.log(e);
       this.$emit("change", e);
     }
   },
   created() {
     //  请求所有的频道
     this.$axios.get("/mp/v1_0/channels").then(res => {
-      console.log(res);
+      // console.log(res);
       this.channelList = res.data.data.channels;
     });
   }

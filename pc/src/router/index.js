@@ -64,7 +64,7 @@ router.afterEach((to, from) => {
     setTimeout(() => {
         NProgress.done()
     }, 1000);
-    window.console.log('进来了')
+    window.console.log('router.afterEach触发了')
 
 })
 export default router
