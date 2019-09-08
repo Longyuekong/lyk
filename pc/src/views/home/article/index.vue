@@ -99,8 +99,6 @@ export default {
   methods: {
     // 封装的获取表格数据的方法
     loadTableData(page) {
-      // 发请求之前让转圈圈
-      this.loading = true;
       //若this.searchparams.status没有传值则默认为undefined,不传这个参数,有的话就传
       const status =
         this.searchParams.status === "" ? undefined : this.searchParams.status;
@@ -124,9 +122,6 @@ export default {
           this.tableData = res.data.data.results;
           // 赋值总条数
           this.total = res.data.data.total_count;
-
-          // 数据回来了就不用转了
-          this.loading = false;
         });
     },
     filterBtn() {
@@ -136,7 +131,7 @@ export default {
     delData(row) {
       // 只要经过JSON-bigint转换后的id
       // 直接toString,就能到它真实的完整的id
-      // console.log(row.id);
+      console.log(row.id);
       // console.log(row.id.toString());
       this.$confirm("您确认删除吗", "提示", {
         confirmButtonText: "确认",

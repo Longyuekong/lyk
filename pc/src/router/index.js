@@ -12,6 +12,9 @@ import login from '../views/login'
 import home from '../views/home'
 import article from '../views/home/article'
 import publish from '../views/home/publish'
+import comment from '../views/home/comment'
+import media from '../views/home/media'
+
 //因为beforeEach也是在router当中
 //
 import NProgress from 'nprogress'
@@ -35,6 +38,14 @@ const routes = [{
         path: '/publish/:id',
         component:publish,
         name:'publish-edit'
+    }, {
+        path: '/comment',
+        component:comment,
+        name:'comment'
+    }, {
+        path: '/media',
+        component:media,
+        name:'media'
     }]
 }]
 //创建路由对象 

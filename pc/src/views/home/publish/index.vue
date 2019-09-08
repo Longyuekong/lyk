@@ -185,7 +185,7 @@ export default {
       }
     } else {
       // 新增判断是否为空
-      if (this.form.title == "" && this.form.content ==''|| this.isSend) {
+      if ((this.form.title == "" && this.form.content =='')|| this.isSend) {
         this.isSend=false;
         //设置开关思想,当我们点击
         return next();
