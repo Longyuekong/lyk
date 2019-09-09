@@ -7,6 +7,7 @@
       </el-radio-group>
       <el-upload
         class="upload-demo"
+        :on-success="uploadSuccess"
         style="float:right"
         action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
         multiple
@@ -48,7 +49,6 @@
     <!-- 分页 -->
     <el-pagination
       background
-      :on-success="uploadSuccess"
       @current-change="handleCurrentChange"
       :page-size="12"
       layout=" prev, pager, next"
@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     uploadSuccess(response) {
-      alert("11221");
+      this.$message.success('上传成功!')
       this.getData();
     },
     //page=1为默认第一页发送

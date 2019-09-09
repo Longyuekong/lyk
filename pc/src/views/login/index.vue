@@ -141,7 +141,7 @@ export default {
         } else {
           //2.登录失败
           this.$message.error("手机号或者验证码错误,请重新登录!");
-          // this.isLoading = false;
+          this.isLoading = false;
           return false;
         }
       });

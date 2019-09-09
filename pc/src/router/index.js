@@ -14,6 +14,7 @@ import article from '../views/home/article'
 import publish from '../views/home/publish'
 import comment from '../views/home/comment'
 import media from '../views/home/media'
+import account from '../views/home/account'
 
 //因为beforeEach也是在router当中
 //
@@ -46,6 +47,10 @@ const routes = [{
         path: '/media',
         component:media,
         name:'media'
+    }, {
+        path: '/account',
+        component:account,
+        name:'account'
     }]
 }]
 //创建路由对象 
@@ -72,10 +77,11 @@ router.beforeEach((to, from, next) => {
 })
 router.afterEach((to, from) => {
     // to and from are both route objects.
+    //路由的进去之后,使用了nprogress进度条
     setTimeout(() => {
         NProgress.done()
     }, 1000);
-    window.console.log('router.afterEach触发了')
+    // window.console.log('router.afterEach触发了')
 
 })
 export default router

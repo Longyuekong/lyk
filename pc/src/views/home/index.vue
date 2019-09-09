@@ -44,7 +44,7 @@
               <el-menu-item index="2-3">粉丝画像</el-menu-item>
               <el-menu-item index="2-4">粉丝列表</el-menu-item>
             </el-submenu>
-            <el-menu-item index="4">
+            <el-menu-item index="/account">
               <span slot="title">账号信息</span>
             </el-menu-item>
           </el-menu>
@@ -67,8 +67,8 @@
             <el-col :span="3" :offset="5">
               <el-dropdown trigger="click" class="my-dropdown" @command="quits">
                 <span class="el-dropdown-link">
-                  <img :src="userMsg.photo" alt />
-                  <span>{{userMsg.name}}</span>
+                  <img :src="$store.state.userMsg.photo" alt />
+                  <span>{{$store.state.userMsg.name}}</span>
                   <i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
@@ -116,13 +116,17 @@ export default {
     }
   },
   created() {
-    //1.拿到缓存的数据
-    let res = window.sessionStorage.getItem("userInfo");
-    //2.JSON格式转字符串
-    let obj = JSON.parse(res);
-    // console.log(obj);
-    this.userMsg.name = obj.name;
-    this.userMsg.photo = obj.photo;
+    // 1.拿到缓存的数据
+    // //2.JSON格式转字符串
+    // let obj = JSON.parse(window.sessionStorage.getItem("userInfo"));
+    // // console.log(obj);
+    // this.userMsg.name = obj.name;
+    // this.userMsg.photo = obj.photo;
+    this.$axios.get("/mp/v1_0/user/profile").then(res => {
+      console.log("created一进来就刷新");
+      console.log(res);
+      this.$store.commit("getMsg", res.data.data);
+    });
   }
 };
 </script>

@@ -71,8 +71,9 @@ axios.interceptors.response.use(function (response) { //状态码为200-400之�
   // 响应错误来到这里
   return Promise.reject(error);
 });
-
+import store from './store'
 new Vue({
   render: h => h(App),
   router,
+  store
 }).$mount('#app')
