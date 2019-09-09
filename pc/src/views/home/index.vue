@@ -123,8 +123,6 @@ export default {
     // this.userMsg.name = obj.name;
     // this.userMsg.photo = obj.photo;
     this.$axios.get("/mp/v1_0/user/profile").then(res => {
-      console.log("created一进来就刷新");
-      console.log(res);
       this.$store.commit("getMsg", res.data.data);
     });
   }

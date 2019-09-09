@@ -68,7 +68,7 @@ export default {
       this.$axios.patch(`/mp/v1_0/user/profile`, this.myForm).then(res => {
         // console.log(res);
         if (res.data.message.toLowerCase() === "ok") {
-          this.$message.success("更新完成!");
+          this.$message.success("修改成功!");
           // 修改后的数据要给vuex更新
           this.$store.commit("getMsg", this.myForm);
         }
