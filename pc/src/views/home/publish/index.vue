@@ -11,13 +11,19 @@
     </el-form-item>
     <!-- 封面 -->
     <el-form-item label="封面:">
-      <el-radio-group v-model="form.status">
-        <el-radio label>单图</el-radio>
-        <el-radio :label="0">三图</el-radio>
-        <el-radio :label="1">无图</el-radio>
-        <el-radio :label="2">自动</el-radio>
+      <el-radio-group v-model="form.cover.type">
+        <el-radio :label="1">单图</el-radio>
+        <el-radio :label="3">三图</el-radio>
+        <el-radio :label="0">无图</el-radio>
+        <el-radio :label="-1">自动</el-radio>
       </el-radio-group>
     </el-form-item>
+    <!-- 图片 -->
+    <el-row v-if="form.cover.type >0">
+      <el-col :span="6" v-for="item in form.cover.type">
+        <imgfile ></imgfile>
+      </el-col>
+    </el-row>
     <!-- 频道 -->
     <el-form-item label="频道">
       <mychannel v-model="form.channel_id"></mychannel>
@@ -40,21 +46,26 @@ import "quill/dist/quill.bubble.css";
 
 import { quillEditor } from "vue-quill-editor";
 import mychannel from "../../../components/mychannel";
+import imgfile from './components/imgFile.vue'
 import { watch } from "fs";
 export default {
   name: "publish",
   components: {
     quillEditor,
-    mychannel
+    mychannel,
+    imgfile
   },
   data() {
     return {
       form: {
         title: "",
         content: "",
-        status: "",
         channel_id: "",
-        isSend:false
+        isSend: false,
+        cover:{
+          type:1,
+          images:[]
+        }
       },
       newForm: {},
       // 用来接受传过来的数据
@@ -137,9 +148,8 @@ export default {
                 if (res.data.message.toLowerCase() == "ok") {
                   this.$message.success("发布成功！");
                   this.newForm = this.form;
-                  this.isSend=true;
+                  this.isSend = true;
                   this.$router.push("/article");
-                  
                 }
               });
           }
@@ -169,7 +179,6 @@ export default {
     } else {
       //新增就不需要加载中，直接就停掉
       console.log(11111);
-
     }
   },
   //to：到哪去
@@ -185,8 +194,8 @@ export default {
       }
     } else {
       // 新增判断是否为空
-      if ((this.form.title == "" && this.form.content =='')|| this.isSend) {
-        this.isSend=false;
+      if ((this.form.title == "" && this.form.content == "") || this.isSend) {
+        this.isSend = false;
         //设置开关思想,当我们点击
         return next();
       }
@@ -210,7 +219,7 @@ export default {
   watch: {
     // 参数是变化后的值
     "$route.params.id"(value) {
-      console.log('变化了：' + value)
+      console.log("变化了：" + value);
       if (value) {
         //有值，代表这是修改，只是把id变了，根据新的id去发请求获取数据渲染界面
         this.sendData();
@@ -228,5 +237,30 @@ export default {
 .ql-editor {
   height: 400px;
   background-color: #fff;
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  background-color: #fff;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>
